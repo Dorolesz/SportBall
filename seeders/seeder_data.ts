@@ -1,82 +1,35 @@
 import { QueryInterface } from 'sequelize';
+import { fakerHU } from '@faker-js/faker';
 
 module.exports = {
   up: async (queryInterface: QueryInterface) => {
-    const users = await queryInterface.bulkInsert('Users', [
-      {
-        name: 'Alex',
-        goalCount: 10,
-        birthDate: '1995-08-15',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Jordan',
-        goalCount: 7,
-        birthDate: '1998-03-22',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Taylor',
-        goalCount: 12,
-        birthDate: '2001-11-30',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Morgan',
-        goalCount: 8,
-        birthDate: '1993-07-19',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Casey',
-        goalCount: 15,
-        birthDate: '2002-02-10',
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ], { returning: true } as any);
+    const users = [];
 
-    await queryInterface.bulkInsert('Teams', [
-      {
-        name: 'Team Alpha',
-        country: 'USA',
-        userId: users[0].id,
+    for (let i = 0; i < 5; i++) {
+      users.push({
+        name: fakerHU.name.firstName(),
+        goalCount: fakerHU.number.int({ min: 1, max: 20 }),
+        birthDate: fakerHU.date.past({ years: 30 }).toISOString().split('T')[0],
         createdAt: new Date(),
         updatedAt: new Date()
-      },
-      {
-        name: 'Team Beta',
-        country: 'Canada',
-        userId: users[1].id,
+      });
+    }
+
+    const insertedUsers = await queryInterface.bulkInsert('Users', users, { returning: true } as any);
+
+    const teams = [];
+
+    for (let i = 0; i < 5; i++) {
+      teams.push({
+        name: `Team ${fakerHU.company.name()}`,
+        country: fakerHU.address.country(),
+        userId: insertedUsers[i].id,
         createdAt: new Date(),
         updatedAt: new Date()
-      },
-      {
-        name: 'Team Gamma',
-        country: 'UK',
-        userId: users[2].id,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Team Delta',
-        country: 'Australia',
-        userId: users[3].id,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      },
-      {
-        name: 'Team Epsilon',
-        country: 'Germany',
-        userId: users[4].id,
-        createdAt: new Date(),
-        updatedAt: new Date()
-      }
-    ], {});
+      });
+    }
+
+    await queryInterface.bulkInsert('Teams', teams, {});
   },
 
   down: async (queryInterface: QueryInterface) => {
