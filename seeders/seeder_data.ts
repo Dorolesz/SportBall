@@ -1,8 +1,7 @@
-'use strict';
+import { QueryInterface } from 'sequelize';
 
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
-    // Insert users
+  up: async (queryInterface: QueryInterface) => {
     const users = await queryInterface.bulkInsert('Users', [
       {
         name: 'Alex',
@@ -39,9 +38,8 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }
-    ], { returning: true });
+    ], { returning: true } as any);
 
-    // Insert teams
     await queryInterface.bulkInsert('Teams', [
       {
         name: 'Team Alpha',
@@ -81,7 +79,7 @@ module.exports = {
     ], {});
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface: QueryInterface) => {
     await queryInterface.bulkDelete('Teams', null, {});
     await queryInterface.bulkDelete('Users', null, {});
   }
