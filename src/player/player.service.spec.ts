@@ -30,7 +30,6 @@ describe('PlayerService', () => {
     const createdPlayer = {
       id: 1,
       ...createPlayerDto,
-      birthDate: new Date(createPlayerDto.birthDate),
     };
 
     jest.spyOn(prismaService.players, 'create').mockResolvedValue(createdPlayer);

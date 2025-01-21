@@ -11,7 +11,7 @@ export class PlayerService {
     return this.prisma.players.create({
       data: {
         ...data,
-        birthDate: new Date(data.birthDate) // Ensure birthDate is in YYYY-MM-DD format
+        birthDate: new Date(data.birthDate).toISOString()
       }
     });
   }
@@ -29,7 +29,7 @@ export class PlayerService {
       where: { id },
       data: {
         ...data,
-        birthDate: data.birthDate ? new Date(data.birthDate) : undefined// Ensure birthDate is in YYYY-MM-DD format
+        birthDate: data.birthDate ? new Date(data.birthDate).toISOString() : undefined
       }
     });
   }
