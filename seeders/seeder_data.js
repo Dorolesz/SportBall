@@ -1,8 +1,7 @@
-import { QueryInterface } from 'sequelize';
-import { fakerHU } from '@faker-js/faker';
+const { fakerHU } = '@faker-js/faker';
 
 module.exports = {
-  up: async (queryInterface: QueryInterface) => {
+  up: async (queryInterface) => {
     const users = [];
 
     for (let i = 0; i < 5; i++) {
@@ -15,7 +14,7 @@ module.exports = {
       });
     }
 
-    const insertedUsers = await queryInterface.bulkInsert('Users', users, { returning: true } as any);
+    const insertedUsers = await queryInterface.bulkInsert('Users', users, { returning: true });
 
     const teams = [];
 
@@ -32,7 +31,7 @@ module.exports = {
     await queryInterface.bulkInsert('Teams', teams, {});
   },
 
-  down: async (queryInterface: QueryInterface) => {
+  down: async (queryInterface) => {
     await queryInterface.bulkDelete('Teams', null, {});
     await queryInterface.bulkDelete('Users', null, {});
   }
